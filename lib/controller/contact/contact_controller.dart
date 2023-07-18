@@ -38,4 +38,6 @@ class ContactController extends GetxController{
     return response;
   }
 
+
+
 }

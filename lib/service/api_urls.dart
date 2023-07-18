@@ -7,4 +7,6 @@ class APIUrls
   static const String AddorUpdateLocation = "/AddGeoLocation";
   static const String AddContact = "/AddContact";
   static const String getContact = "/GetContact";
+  static const String getProfile = "/GetUserDetails";
+
 }

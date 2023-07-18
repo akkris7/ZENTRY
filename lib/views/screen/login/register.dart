@@ -224,7 +224,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 emailId: emailController.text.trim(),
                                 password: passwordController.text.trim(),
                                 is_volunteer: _switchValue,
-                              ));
+                              ),false);
                             }
                             else{
                               showToast(message: "Please confirm the password");

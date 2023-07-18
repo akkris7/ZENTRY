@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zentry/model/model/registration_model.dart';
 import 'package:zentry/model/response/login_response.dart';
+import 'package:zentry/model/response/user_details_response.dart';
 import 'package:zentry/service/api_helper.dart';
 import 'package:zentry/utils/constants.dart';
 import 'package:zentry/views/screen/home/home_screen.dart';
@@ -17,6 +18,22 @@ class AuthController extends GetxController{
   var isLading = false.obs;
   String prefix = "91";
   String serverName = APIHelper().baseUrl;
+  var records = <ProfileRecord>[].obs;
+  UserDetailsResponse? detailsResponse;
+  getUserDetails () async {
+    isLading.value = true;
+    UserDetailsResponse? response;
+
+    try {
+      response = await APIHelper().getProfile();
+      print(response?.details);
+    } catch (e) {
+      print('Error occurred while fetching contact: $e');
+    }
+
+    isLading.value = false;
+    return response;
+  }
 
   login(String username, String password) async {
     isLading.value = true;
@@ -43,10 +60,10 @@ class AuthController extends GetxController{
     isLading.value = false;
   }
 
-  register (RegistrationRequestModel request) async{
+  register (RegistrationRequestModel request,bool isedit) async{
     print(request.is_volunteer);
     isLading.value = true;
-    dynamic response = await APIHelper().register(request);
+    dynamic response = await APIHelper().register(request,isedit);
     bool result = response["isSuccess"];
     if (result){
       print(result);
@@ -64,6 +81,9 @@ class AuthController extends GetxController{
     FlutterBackgroundService().sendData({"action": "start"});
   }
 
+  dellocation () async {
+    dynamic response = await APIHelper().deleteLocationLink();
+  }
 
 
 

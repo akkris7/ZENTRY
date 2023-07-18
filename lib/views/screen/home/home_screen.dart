@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:zentry/controller/authentication/authentication_controller.dart';
+import 'package:zentry/profilepage/profilepage.dart';
 import 'package:zentry/settings.dart';
 import 'package:sensors_plus/sensors_plus.dart';
 
@@ -71,7 +72,7 @@ class _ProfiledetailsState extends State<Profiledetails>
     double acceleration = sqrt(pow(_accelerometerValues.x, 2) +
         pow(_accelerometerValues.y, 2) +
         pow(_accelerometerValues.z, 2));
-    print(acceleration);
+
     if (acceleration > 29) {
       _shakeCount += 1;
       if (_shakeCount == 3) {
@@ -127,9 +128,17 @@ class _ProfiledetailsState extends State<Profiledetails>
                     ),
                   ),
                   const SizedBox(width: 70),
-                  const CircleAvatar(
-                    radius: 21,
-                    backgroundImage: AssetImage('assets/pexels-suliman-sallehi-1704488.jpg'),
+                  InkWell(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context)=> const profdetails()),
+                      );
+                    },
+                    child: const CircleAvatar(
+                      radius: 21,
+                      backgroundImage: AssetImage('assets/pexels-suliman-sallehi-1704488.jpg'),
+                    ),
                   ),
                 ],
               ),
@@ -230,7 +239,9 @@ class _ProfiledetailsState extends State<Profiledetails>
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     InkWell(
-                      onTap: () => _launchUrl(),
+                      onTap: () async {
+                        await authController.dellocation ();
+                      },
                       borderRadius: BorderRadius.circular(50.0),
                       child: Container(
                         height: MediaQuery.of(context).size.height * 0.20,
@@ -250,7 +261,7 @@ class _ProfiledetailsState extends State<Profiledetails>
                             ),
                             SizedBox(height: 10),
                             Text(
-                              "Schedule Safety",
+                              "Clear History",
                               style: TextStyle(
                                 color: Color(0xffF7F0EE),
                                 fontWeight: FontWeight.bold,

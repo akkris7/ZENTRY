@@ -10,6 +10,7 @@ import 'package:zentry/model/model/add_contact_model.dart';
 import 'package:zentry/model/model/registration_model.dart';
 import 'package:zentry/model/response/contact_response.dart';
 import 'package:zentry/model/response/login_response.dart';
+import 'package:zentry/model/response/user_details_response.dart';
 import 'package:zentry/service/api_service.dart';
 import 'package:zentry/service/api_urls.dart';
 import 'package:zentry/service/exception_handler.dart';
@@ -54,10 +55,14 @@ class APIHelper
     }
   }
 
-  Future<dynamic> register(RegistrationRequestModel registrationRequestModel) async {
+  Future<dynamic> register(RegistrationRequestModel registrationRequestModel, bool isedit) async {
     final String url = baseUrl + APIUrls.register;
     SharedPreferences prefs = await SharedPreferences.getInstance();
-
+    int parsedUserId = 0;
+    if (isedit){
+      String? userId = prefs.getString("userId");
+      int parsedUserId = int.parse(userId!);
+    }
     try {
       const JsonEncoder encoder = JsonEncoder();
       String body = encoder.convert({
@@ -66,7 +71,8 @@ class APIHelper
       "phone_number": registrationRequestModel.phoneNumber,
       "email": registrationRequestModel.emailId,
       "password": registrationRequestModel.password,
-      "is_volunteeer":  registrationRequestModel.is_volunteer
+      "is_volunteer":  registrationRequestModel.is_volunteer,
+        "user_id" : parsedUserId,
       });
       Response? response = await APIService().postAPICall(url, body, headers);
 
@@ -359,7 +365,7 @@ class APIHelper
       print(liveLocationLink);
       const JsonEncoder encoder = JsonEncoder();
       String body = encoder.convert({
-        "record_id": 0,
+        "to_be_deleted": false,
         "user_id": parsedUserId,
         "longitude" : longitude,
         "latitude" : latitude
@@ -386,5 +392,75 @@ class APIHelper
 
 
   }
+  Future<dynamic> deleteLocationLink() async {
 
+    final String url = baseUrl + APIUrls.AddorUpdateLocation;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? userId = prefs.getString("userId");
+    int parsedUserId = int.parse(userId!);
+
+    try{
+      const JsonEncoder encoder = JsonEncoder();
+      String body = encoder.convert({
+        "to_be_deleted": true,
+        "user_id": parsedUserId,
+        "longitude" : "",
+        "latitude" : ""
+      });
+      Response? response = await APIService().postAPICall(url, body, headers);
+
+      var responseData = json.decode(response!.body);
+
+      if (response.statusCode == 200) {
+        return response.statusCode;
+      }else if (responseData != null && responseData.contains("errorMessage")) {
+        showToast(message: responseData["errorMessage"]);
+        return null;
+      } else {
+        showToast(message: "Something went wrong!");
+      }
+      print("-----------------------------");
+      return null;
+
+    } catch (e) {
+      print('Error obtaining live location: $e');
+      return null;
+    }
+
+
+  }
+
+  Future<UserDetailsResponse?> getProfile() async {
+
+    try {
+      final String url = baseUrl + APIUrls.getProfile;
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? userId = prefs.getString("userId");
+      int parsedUserId = int.parse(userId!);
+
+      String body = json.encode({"user_id": parsedUserId});
+
+      Response? response = await APIService().postAPICall(url, body, headers);
+      var responseData = json.decode(response!.body);
+
+      if (response.statusCode == 200) {
+        print("Success");
+        return UserDetailsResponse.fromJson(responseData);
+      } else if (responseData != null && responseData.contains("ErrorMessage")) {
+        showToast(message: responseData["ErrorMessage"]);
+        return null;
+      } else {
+        showToast(message: "Something went wrong");
+        return null;
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print("Error type: ${e.runtimeType..toString()}");
+      }
+      String errorMessage = ExceptionHandlers().getExceptionString(e);
+      showToast(message: errorMessage);
+      print("API error: $errorMessage");
+      return null;
+    }
+  }
 }

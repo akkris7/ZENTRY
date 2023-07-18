@@ -7,6 +7,7 @@ class RegistrationRequestModel {
   String? emailId;
   String? password;
   bool? is_volunteer;
+  int? userId;
 
   RegistrationRequestModel({
     this.firstName,
@@ -14,7 +15,8 @@ class RegistrationRequestModel {
     this.phoneNumber,
     this.emailId,
     this.password,
-    this.is_volunteer
+    this.is_volunteer,
+    this.userId,
   });
 
   RegistrationRequestModel.fromJson(Map<String, dynamic> json) {
@@ -24,6 +26,7 @@ class RegistrationRequestModel {
     emailId = json['email'];
     password = json['password'];
     is_volunteer = json['is_volunteeer'];
+    userId = json['user_id'];
   }
 
   Map<String, dynamic> toJson() {
@@ -35,6 +38,7 @@ class RegistrationRequestModel {
     data['email'] = emailId;
     data['password'] = password;
     data['is_volunteeer'] = is_volunteer;
+    data['user_id'] = userId;
     return data;
   }
 }

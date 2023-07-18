@@ -2,10 +2,12 @@ import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zentry/controller/authentication/authentication_controller.dart';
 import 'package:zentry/service/api_urls.dart';
 import 'package:zentry/utils/colors.dart';
 import 'package:zentry/utils/images.dart';
+import 'package:zentry/views/screen/home/home_screen.dart';
 import 'package:zentry/views/screen/login/register.dart';
 import 'package:zentry/views/widgets/custom_buton.dart';
 
@@ -36,9 +38,17 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   void initState(){
+    checkTokenExists();
     super.initState();
   }
-
+  checkTokenExists() async {
+    final SharedPreferences preferences = await SharedPreferences.getInstance();
+    String? phoneNumber = preferences.getString("phoneNumber");
+    print(phoneNumber);
+    if (phoneNumber !=null && phoneNumber!= ""){
+      Get.offAll(const Profiledetails());
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
