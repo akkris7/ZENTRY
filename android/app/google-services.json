@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "200293683260",
+    "project_id": "zentry-75164",
+    "storage_bucket": "zentry-75164.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:200293683260:android:8faeb5e2d02c8fdb813339",
+        "android_client_info": {
+          "package_name": "com.example"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "200293683260-ht47vifis20j4p090315cj6o656b9gbu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDL_y1CVmXaqsUB7MqqOolimegj8eq7BUs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "200293683260-ht47vifis20j4p090315cj6o656b9gbu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
