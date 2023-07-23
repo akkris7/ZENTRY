@@ -18,7 +18,7 @@ class AuthController extends GetxController{
   var isLading = false.obs;
   String prefix = "91";
   String serverName = APIHelper().baseUrl;
-  var records = <ProfileRecord>[].obs;
+  var records = <ProfileRecords>[].obs;
   UserDetailsResponse? detailsResponse;
   getUserDetails () async {
     isLading.value = true;
@@ -26,7 +26,7 @@ class AuthController extends GetxController{
 
     try {
       response = await APIHelper().getProfile();
-      print(response?.details);
+      print("After getting");
     } catch (e) {
       print('Error occurred while fetching contact: $e');
     }

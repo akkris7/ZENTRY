@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:zentry/controller/authentication/authentication_controller.dart';
 import 'package:zentry/profilepage/profilepage.dart';
@@ -317,15 +318,23 @@ class _ProfiledetailsState extends State<Profiledetails>
                   width: MediaQuery.of(context).size.width*0.80,
                 margin: EdgeInsets.fromLTRB(20, 20, 20, 20),
                 child: CustomButton(title: "Logout",
-                        onTap: (){
-                          Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(builder: (context) {
-                              return const LoginScreen();
-                            }),
-                                (route) => false,
-                          );
-                        },
+                  onTap: () async {
+                    final SharedPreferences prefs = await SharedPreferences.getInstance();
+                    String? phoneNumber = prefs.getString("phoneNumber");
+                    await prefs.clear().then((value) {
+                      if(phoneNumber!=null){
+                        prefs.setString("phoneNumber", "");
+                        print(phoneNumber);
+                      }
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(builder: (context) {
+                          return const LoginScreen();
+                        }),
+                            (route) => false,
+                      );
+                    });
+                    },
               )
               )
             ],

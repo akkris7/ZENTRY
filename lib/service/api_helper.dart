@@ -61,7 +61,7 @@ class APIHelper
     int parsedUserId = 0;
     if (isedit){
       String? userId = prefs.getString("userId");
-      int parsedUserId = int.parse(userId!);
+      parsedUserId = int.parse(userId!);
     }
     try {
       const JsonEncoder encoder = JsonEncoder();
@@ -445,6 +445,7 @@ class APIHelper
 
       if (response.statusCode == 200) {
         print("Success");
+        print(UserDetailsResponse.fromJson(responseData));
         return UserDetailsResponse.fromJson(responseData);
       } else if (responseData != null && responseData.contains("ErrorMessage")) {
         showToast(message: responseData["ErrorMessage"]);

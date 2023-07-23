@@ -24,6 +24,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
   TextEditingController confirmPasswordController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   bool _switchValue = false;
+  bool isValidPhone = true;
+  bool isValidEmail = true;
+  bool isValidPassword = true;
   final _formKey = GlobalKey<FormState>();
   final AuthController authController = Get.put(AuthController());
 
@@ -31,7 +34,21 @@ class _RegisterScreenState extends State<RegisterScreen> {
   void initState() {
     super.initState();
   }
+  bool isValidEmailID(String input) {
+    final emailRegex = RegExp(r'^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$');
+    return emailRegex.hasMatch(input);
+  }
 
+  bool isValidPhoneNumber(String input) {
+    final phoneRegex = RegExp(r'^\+91\d{10}$');
+    // Assumes a 10-digit phone number format
+    return phoneRegex.hasMatch(input);
+  }
+
+  bool isValidPasswordCheck(String input) {
+    final passwordRegex = RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$');
+    return passwordRegex.hasMatch(input);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -126,88 +143,128 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           )
                       ),
                       Container(
-                          margin: const EdgeInsets.only(bottom: 10,top: 10),
-                          width: MediaQuery.of(context).size.width*0.80,
-                          height: MediaQuery.of(context).size.height*0.070,
-                          child: TextField(
-                            controller: phoneController,
-                            decoration: InputDecoration(
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(20),
-                                borderSide: const BorderSide(color: Colors.blue,width: 2),
-                              ),
-                              enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(20),
-                                  borderSide: const BorderSide(color: lightGrey2, width: 2)
-                              ),
-                              hintText: "Phone Number",
-                              fillColor: themeBg,
-                              filled: true,
+                        margin: const EdgeInsets.only(bottom: 10, top: 10),
+                        width: MediaQuery.of(context).size.width * 0.80,
+                        height: MediaQuery.of(context).size.height * 0.070,
+                        child: TextFormField(
+                          controller: phoneController,
+                          keyboardType: TextInputType.phone,
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return 'Please enter a phone number';
+                            } else if (!isValidPhoneNumber(value)) {
+                              return 'Please enter a valid phone number';
+                            }
+                            return null;
+                          },
+                          decoration: InputDecoration(
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20),
+                              borderSide: const BorderSide(color: Colors.blue, width: 2),
                             ),
-                          )
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20),
+                              borderSide: const BorderSide(color: lightGrey2, width: 2),
+                            ),
+                            hintText: "Phone Number",
+                            fillColor: themeBg,
+                            filled: true,
+                          ),
+                        ),
+                      ),
+
+                      // Email TextField
+                      Container(
+                        margin: const EdgeInsets.only(bottom: 10, top: 10),
+                        width: MediaQuery.of(context).size.width * 0.80,
+                        height: MediaQuery.of(context).size.height * 0.070,
+                        child: TextFormField(
+                          controller: emailController,
+                          keyboardType: TextInputType.emailAddress,
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return 'Please enter an email';
+                            } else if (!isValidEmailID(value)) {
+                              return 'Please enter a valid email';
+                            }
+                            return null;
+                          },
+                          decoration: InputDecoration(
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20),
+                              borderSide: const BorderSide(color: Colors.blue, width: 2),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20),
+                              borderSide: const BorderSide(color: lightGrey2, width: 2),
+                            ),
+                            hintText: "Email",
+                            fillColor: themeBg,
+                            filled: true,
+                          ),
+                        ),
+                      ),
+
+                      // Password TextField
+                      Container(
+                        margin: const EdgeInsets.only(bottom: 10, top: 10),
+                        width: MediaQuery.of(context).size.width * 0.80,
+                        height: MediaQuery.of(context).size.height * 0.070,
+                        child: TextFormField(
+                          controller: passwordController,
+                          obscureText: true,
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return 'Please enter a password';
+                            } else if (!isValidPasswordCheck(value)) {
+                              return 'Please enter a valid password. Ensure the password meets the following criteria: \nContains at least one uppercase letter (A-Z) \nContains at least one lowercase letter (a-z) \nContains at least one digit (0-9) \nHas a minimum length of 8 characters';
+                            }
+                            return null;
+                          },
+                          decoration: InputDecoration(
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20),
+                              borderSide: const BorderSide(color: Colors.blue, width: 2),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20),
+                              borderSide: const BorderSide(color: lightGrey2, width: 2),
+                            ),
+                            hintText: "Password",
+                            fillColor: themeBg,
+                            filled: true,
+                          ),
+                        ),
                       ),
                       Container(
-                          margin: const EdgeInsets.only(bottom: 10,top: 10),
-                          width: MediaQuery.of(context).size.width*0.80,
-                          height: MediaQuery.of(context).size.height*0.070,
-                          child: TextField(
-                            controller: emailController,
-                            decoration: InputDecoration(
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(20),
-                                borderSide: const BorderSide(color: Colors.blue,width: 2),
-                              ),
-                              enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(20),
-                                  borderSide: const BorderSide(color: lightGrey2, width: 2)
-                              ),
-                              hintText: "Email Id",
-                              fillColor: themeBg,
-                              filled: true,
+                        margin: const EdgeInsets.only(bottom: 10, top: 10),
+                        width: MediaQuery.of(context).size.width * 0.80,
+                        height: MediaQuery.of(context).size.height * 0.070,
+                        child: TextFormField(
+                          controller: confirmPasswordController,
+                          obscureText: true,
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return 'Confirm password';
+                            } else if (!isValidPasswordCheck(value)) {
+                              return 'Please enter a valid password';
+                            }
+                            return null;
+                          },
+                          decoration: InputDecoration(
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20),
+                              borderSide: const BorderSide(color: Colors.blue, width: 2),
                             ),
-                          )
-                      ),
-                      Container(
-                          margin: const EdgeInsets.only(bottom: 10,top: 10),
-                          width: MediaQuery.of(context).size.width*0.80,
-                          height: MediaQuery.of(context).size.height*0.070,
-                          child: TextField(
-                            controller: passwordController,
-                            decoration: InputDecoration(
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(20),
-                                borderSide: const BorderSide(color: Colors.blue,width: 2),
-                              ),
-                              enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(20),
-                                  borderSide: const BorderSide(color: lightGrey2, width: 2)
-                              ),
-                              hintText: "Password",
-                              fillColor: themeBg,
-                              filled: true,
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20),
+                              borderSide: const BorderSide(color: lightGrey2, width: 2),
                             ),
-                          )
-                      ),
-                      Container(
-                          margin: const EdgeInsets.only(bottom: 10,top: 10),
-                          width: MediaQuery.of(context).size.width*0.80,
-                          height: MediaQuery.of(context).size.height*0.070,
-                          child: TextField(
-                            controller: confirmPasswordController,
-                            decoration: InputDecoration(
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(20),
-                                borderSide: const BorderSide(color: Colors.blue,width: 2),
-                              ),
-                              enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(20),
-                                  borderSide: const BorderSide(color: lightGrey2, width: 2)
-                              ),
-                              hintText: "Confirm Password",
-                              fillColor: themeBg,
-                              filled: true,
-                            ),
-                          )
+                            hintText: "Password",
+                            fillColor: themeBg,
+                            filled: true,
+                          ),
+                        ),
                       ),
                       CustomButton(
                         width: MediaQuery.of(context).size.width*0.80,

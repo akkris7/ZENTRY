@@ -41,32 +41,34 @@ class _profdetailsState extends State<profdetails> {
   final _formKey = GlobalKey<FormState>();
   final AuthController authController = Get.put(AuthController());
   UserDetailsResponse? userDetailsResponse;
-  var records = <ProfileRecord?>[].obs;
-  List<ProfileRecord> contactList = <ProfileRecord>[];
+  var records = <ProfileRecords>[].obs;
+  List<ProfileRecords> contactList = <ProfileRecords>[];
 
   @override
   void initState() {
 
     super.initState();
+    contactList = [];
     retreivedetails();
   }
 
   Future<void> retreivedetails() async  {
     userDetailsResponse = await authController.getUserDetails();
-    contactList = userDetailsResponse?.details ?? [];
+    contactList = userDetailsResponse?.records ?? [];
+
     if(contactList.isNotEmpty){
-      ProfileRecord? profile = contactList[0];
+      print("inside if");
+      ProfileRecords? profile = contactList[0];
       firstNameController.text = profile.firstName!;
       lastNameController.text = profile.lastName!;
       phoneController.text = profile.phoneNumber!;
-      emailController.text = profile.emailId!;
-      passwordController.text = profile.password!;
+      emailController.text = profile.email!;
+      passwordController.text = profile.passWord!;
+      print(passwordController.text);
       _switchValue = profile.isVolunteer!;
     }
 
-    setState(() {
-      
-    });
+    setState(() { });
   }
 
   @override

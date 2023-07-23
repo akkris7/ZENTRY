@@ -1,71 +1,73 @@
+import 'dart:convert';
+
 class UserDetailsResponse {
-  String? errorMessage;
-  bool? isSuccess;
-  List<ProfileRecord>? details;
+  String? ErrorMessage;
+  bool? IsSuccess;
+  List<ProfileRecords>? records;
 
   UserDetailsResponse(
-      {this.errorMessage,
-        this.isSuccess,
-        this.details});
+      {
+        this.ErrorMessage,
+        this.IsSuccess,
+        this.records});
 
   UserDetailsResponse.fromJson(Map<String, dynamic> json) {
-    errorMessage = json['errorMessage'];
-    isSuccess = json['isSuccess'];
-    details = json['details'];
+    ErrorMessage = json['errorMessage'];
+    IsSuccess= json['isSuccess'];
     if (json['details'] != null) {
-      details = <ProfileRecord>[];
+      records = <ProfileRecords>[];
       json['details'].forEach((v) {
-        details!.add(ProfileRecord.fromJson(v));
+        records!.add(ProfileRecords.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['errorMessage'] = errorMessage;
-    data['isSuccess'] = isSuccess;
-    data['details'] = details;
-    if (details != null) {
-      data['details'] = details!.map((v) => v.toJson()).toList();
+    data['errorMessage'] = ErrorMessage;
+    data['isSuccess'] = IsSuccess;
+    if (records != null) {
+      data['details'] = records!.map((v) => v.toJson()).toList();
     }
     return data;
   }
 }
 
-class ProfileRecord {
+class ProfileRecords {
 
-  String? emailId;
+  String? email;
   bool? isVolunteer;
   String? firstName;
   String? lastName;
   String? phoneNumber;
-  String? password;
+  String? passWord;
 
-  ProfileRecord(
-      {this.emailId,
-        this.password,
-        this.phoneNumber,
-        this.lastName,
+  ProfileRecords(
+      {this.email,
+        this.isVolunteer,
         this.firstName,
-        this.isVolunteer});
+        this.lastName,
+        this.phoneNumber,
+        this.passWord
+      });
 
-  ProfileRecord.fromJson(Map<String, dynamic> json) {
-    emailId = json['email'];
+  ProfileRecords.fromJson(Map<String, dynamic> json) {
+    email = json['email'];
     isVolunteer = json['isVolunteer'];
     firstName = json['firstName'];
     lastName = json['lastName'];
     phoneNumber = json['phoneNumber'];
-    password = json['password'];
+    passWord = json['password'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['email'] = emailId;
+    data['email'] = email;
     data['isVolunteer'] = isVolunteer;
     data['firstName'] = firstName;
     data['lastName'] = lastName;
     data['phoneNumber'] = phoneNumber;
-    data['password'] = password;
+    data['password'] = passWord;
     return data;
   }
 }
